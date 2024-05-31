@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <div class="glow-container">
+        <div class="ball"></div>
+        <div class="ball" style="--delay:-12s;--size:0.35;--speed:25s;"></div>
+        <div class="ball" style="--delay:-10s;--size:0.3;--speed:15s;"></div>
+    </div>
+
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form id="signUpForm" action="/signup" method="POST">
+                <h1>Create Account</h1>
+                <div class="social-container">
+                    <a href="http://localhost:3000/auth/google" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="http://localhost:3000/auth/github" class="social"><i class="fab fa-github"></i></a>
+                </div>
+                <span>or use your email for registration</span>
+                <div class="infield">
+                    <input type="text" placeholder="Username" name="username" required />
+                    <label></label>
+                </div>
+                <div class="infield">
+                    <input type="email" placeholder="Email" name="email" required />
+                    <label></label>
+                </div>
+                <div class="infield">
+                    <input type="password" placeholder="Password" name="password" required />
+                    <label></label>
+                </div>
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+
+        <div class="form-container sign-in-container">
+            <form id="signInForm" action="/signin" method="POST">
+                <h1>Sign in</h1>
+                <div class="social-container">
+                    <a href="http://localhost:3000/auth/google" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="http://localhost:3000/auth/github" class="social"><i class="fab fa-github"></i></a>
+                </div>
+                <span>or use your account</span>
+                <div class="infield">
+                    <input type="text" placeholder="Email" name="identifier" required />
+                    <label></label>
+                </div>
+                <div class="infield">
+                    <input type="password" placeholder="Password" name="password" required />
+                    <label></label>
+                </div>
+                <a href="#" class="forgot">Forgot your password?</a>
+                <button type="submit">Sign In</button>
+            </form>
+            <button class="hidden" id="signUpBtn">Sign Up</button>
+        </div>
+
+        <div class="overlay-container" id="overlayCon">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Welcome Back!</h1>
+                    <p>To keep connected with us please login with your personal info</p>
+                    <button>Sign In</button>
+                    <button class="hidden">Sign Up</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Enter your personal details and start journey with us</p>
+                    <button id="signUpBtn">Sign Up</button>
+                </div>
+            </div>
+            <button id="overlayBtn"></button>
+        </div>
+    </div>
+
+    <div id="popup" class="popup">
+        <p>Registration successful!</p>
+        <button id="closePopup">Close</button>
+    </div>
+
+    <div id="emailExistsPopup" class="popup">
+        <p>Email is already registered!</p>
+        <button id="closeEmailExistsPopup">Close</button>
+    </div>
+
+    <div id="invalidCredentialsPopup" class="popup">
+        <p>Invalid credentials! Try again</p>
+        <button id="closeInvalidPopup">Close</button>
+    </div>
+
+    <div id="usernametakenPopup" class="popup">
+        <p>Username already taken!</p>
+        <button id="closeUsernamePopup">Close</button>
+    </div>
+</body>
+
+</html>
