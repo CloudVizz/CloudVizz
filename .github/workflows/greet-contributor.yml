@@ -1,9 +1,9 @@
-
 name: "GreetContributor"
+
 on:
   pull_request:
-    types: [opened,synchronize]
-    
+    types: [opened, synchronize]
+
 jobs:
   GreetCommitter:    
     runs-on: ubuntu-latest
@@ -13,5 +13,4 @@ jobs:
       env: 
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with: 
-        content: "<Thank you for taking your time and effort for your contribution, we truly value it.>"
-       #default content is "Thank you for taking your time and effort for your contribution, we truly value it. :tada:" 
+        content: "Thank you for taking your time and effort for your contribution, we truly value it."
