@@ -1,4 +1,5 @@
-# Project documentation (architecture, guides)
+## Project documentation (architecture, guides)
+
 
 root/
 │
