@@ -6,12 +6,12 @@ import { faGoogle, faGithub } from '@fortawesome/free-brands-svg-icons';
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCM0e-gibYxQ2Vqd8uHsSkFLhIVxc30AUE",
-  authDomain: "cloudvizz.firebaseapp.com",
-  projectId: "cloudvizz",
-  storageBucket: "cloudvizz.appspot.com",
-  messagingSenderId: "188350005429",
-  appId: "1:188350005429:web:d5a3f2e3e5e3c36e2b6827"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);

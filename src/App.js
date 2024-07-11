@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from './components/LoginPage';
-import Dashboard from './components/Dashboard'; // Create this component for your dashboard
+import Dashboard from './components/Dashboard';
 
 const App = () => {
   return (
