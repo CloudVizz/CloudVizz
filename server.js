@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 const mongoURI = process.env.MONGO_URI;
@@ -11,14 +12,23 @@ mongoose.connect(mongoURI)
   .catch(err => console.error('MongoDB connection error:', err));
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = 5000;
 
-// Middleware
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Mongoose schema and model
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100
+});
+
+
+app.use(limiter);
+
+
 const roleSchema = new mongoose.Schema({
   service_name: String,
   role_arn: String,
