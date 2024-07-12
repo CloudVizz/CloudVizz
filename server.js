@@ -1,40 +1,44 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const mongoose = require('mongoose');
-const rateLimit = require('express-rate-limit');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const GitHubStrategy = require('passport-github2').Strategy;
 const session = require('express-session');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const mongoose = require('mongoose');
 const path = require('path');
 require('dotenv').config();
 
 const app = express();
-const port = 5000;
-
-// Middleware
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({ secret: 'your_secret', resave: false, saveUninitialized: true }));
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(express.static(path.join(__dirname, 'public')));
-
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, 
-  max: 100 
-});
-
-app.use(limiter);
+const port = process.env.PORT || 5000;
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// Passport.js setup
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
+
+const sessionOptions = {
+  secret: 'your_secret',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    sameSite: 'strict',
+  },
+};
+
+app.use(session(sessionOptions));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Passport configuration
 passport.serializeUser((user, done) => {
   done(null, user);
 });
@@ -63,7 +67,7 @@ passport.use(new GitHubStrategy({
   }
 ));
 
-// Google authentication routes
+// Routes for Google and GitHub authentication
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }),
@@ -72,7 +76,6 @@ app.get('/auth/google/callback', passport.authenticate('google', { failureRedire
     res.redirect('/dashboard');
   });
 
-// GitHub authentication routes
 app.get('/auth/github', passport.authenticate('github', { scope: ['user:email'] }));
 
 app.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/' }),
@@ -81,6 +84,33 @@ app.get('/auth/github/callback', passport.authenticate('github', { failureRedire
     res.redirect('/dashboard');
   });
 
+app.get('/dashboard', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+  } else {
+    res.redirect('/');
+  }
+});
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/user', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.json(req.user);
+  } else {
+    res.status(401).json({ message: 'Unauthorized' });
+  }
+});
+
+app.post('/logout', (req, res) => {
+  req.logout(() => {
+    res.redirect('/');
+  });
+});
+
+// Role creation endpoint
 const roleSchema = new mongoose.Schema({
   service_name: String,
   role_arn: String,
@@ -110,34 +140,7 @@ app.get('/roles', async (req, res) => {
   }
 });
 
-app.get('/dashboard', (req, res) => {
-  if (req.isAuthenticated()) {
-    res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
-  } else {
-    res.redirect('/');
-  }
-});
-
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.get('/user', (req, res) => {
-  if (req.isAuthenticated()) {
-    res.json(req.user);
-  } else {
-    res.status(401).json({ message: 'Unauthorized' });
-  }
-});
-
-app.post('/logout', (req, res) => {
-  req.logout(() => {
-    res.redirect('/');
-  });
-});
-
+// Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
