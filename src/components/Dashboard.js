@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 const Dashboard = () => {
   const [service, setService] = useState('');
-  const [externalId, setExternalId] = useState(uuidv4());
+  const [externalId, setExternalId] = useState('');
   const [serviceName, setServiceName] = useState('');
   const [roleArn, setRoleArn] = useState('');
   const [externalIdInput, setExternalIdInput] = useState('');
   const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    const id = uuidv4();
+    setExternalId(id);
+    setExternalIdInput(id);
+  }, []);
 
   const handleServiceChange = (e) => {
     setService(e.target.value);
@@ -30,7 +36,7 @@ const Dashboard = () => {
     const data = { service_name: serviceName, role_arn: roleArn, external_id: externalIdInput };
     
     try {
-      const response = await fetch('http://localhost:5000/create_role', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/create_role`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -53,7 +59,6 @@ const Dashboard = () => {
 
   const redirectToAWSRoleCreation = () => {
     const awsAccountNumber = '767398108291';
-    setExternalId(uuidv4());
 
     const redirectUrl = `https://us-east-1.console.aws.amazon.com/iamv2/home?region=us-east-1#/roles/create?awsAccount=${awsAccountNumber}&externalId=${externalId}&policies=arn%3Aaws%3Aiam%3A%3Aaws%3Apolicy%2FReadOnlyAccess&isThirdParty=true&step=review&trustedEntityType=AWS_ACCOUNT`;
 

@@ -135,10 +135,10 @@ const LoginPage = () => {
             </button>
           </div>
           <div className="text-center mt-6 flex justify-center space-x-4">
-            <a href="http://localhost:3000/auth/google" className="text-gray-700 hover:text-red-600 transition duration-300">
+            <a href={process.env.REACT_APP_GOOGLE_AUTH_URL} className="text-gray-700 hover:text-red-600 transition duration-300">
               <FontAwesomeIcon icon={faGoogle} size="2x" />
             </a>
-            <a href="http://localhost:3000/auth/github" className="text-gray-700 hover:text-gray-900 transition duration-300">
+            <a href={process.env.REACT_APP_GITHUB_AUTH_URL} className="text-gray-700 hover:text-gray-900 transition duration-300">
               <FontAwesomeIcon icon={faGithub} size="2x" />
             </a>
           </div>

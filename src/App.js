@@ -9,9 +9,19 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/auth/google/callback" element={<OAuthCallback />} />
+        <Route path="/auth/github/callback" element={<OAuthCallback />} />
       </Routes>
     </Router>
   );
+};
+
+const OAuthCallback = () => {
+  React.useEffect(() => {
+    window.location.href = '/dashboard';
+  }, []);
+
+  return <div>Loading...</div>;
 };
 
 export default App;
